@@ -1,0 +1,3 @@
+rootProject.name = 'BrandYourTimer'
+
+include ':app'
