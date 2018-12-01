@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { sizing, colors } from '../../theme';
 
 export default class ConfigurableImage extends React.Component {
@@ -7,11 +7,15 @@ export default class ConfigurableImage extends React.Component {
         super(props);
     }
 
+    onOpeningImagePicker = () => {
+        this.props.onImagePress();
+    }
+
     render() {
         return (
-            <View style={styles.view}>
-                <Image style={styles.image}  resizeMode="contain" source={require('../../assets/blog.jpg')} />
-            </View>
+            <TouchableOpacity style={styles.view} onPress={this.onOpeningImagePicker}>
+                <Image style={styles.image} resizeMode="contain" source={this.props.image} />
+            </TouchableOpacity>
         );
     }
 }
@@ -19,7 +23,8 @@ export default class ConfigurableImage extends React.Component {
 const styles = StyleSheet.create({
     view: {
         flex: 1
-    },  
+    },
+
     image: {
         flex: 1,
         height: undefined,

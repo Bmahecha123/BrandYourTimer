@@ -6,6 +6,7 @@ import ConfigurableImage from '../../configurable-image/configurable-image';
 import RoundCounter from '../../round-counter/round-counter';
 import Timer from '../../timer/timer';
 import { Time, TimerType } from '../../../types';
+import ImagePicker from 'react-native-image-picker';
 
 export default class TimerMain extends React.Component {
     constructor(props) {
@@ -18,8 +19,41 @@ export default class TimerMain extends React.Component {
             isPlaying: false,
             isResting: false,
             timerBackground: colors.timberWolf,
-            roundNumber: 1
+            roundNumber: 1,
+            image: require('../../../assets/blog.jpg')
         }
+    }
+
+    handleOpeningImagePicker = () => {
+        //alert('i got clicked!');
+        const options = {
+            title: 'Select Logo',
+            cancelButtonTitle: 'Cancel',
+            cameraType: 'front',
+            mediaType: 'photo',
+            storageOptions: {
+                cameraRoll: true,
+                waitUntilSaved: true
+            }
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log(`Response = ${response}`);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker.');
+            } else if (response.error) {
+                console.log(`ImagePicker Error: ${response.error}`);
+            } else {
+                const source = { uri: response.uri };
+
+                alert(response.uri);
+
+                this.setState({
+                    image: source
+                });
+            }
+        });
     }
 
     handleSwipeUp = async (timerType) => {
@@ -154,7 +188,7 @@ export default class TimerMain extends React.Component {
             <View style={styles.container}>
                 <View style={styles.row}>
                     <View style={{ flex: 2 / 3 }}>
-                        <ConfigurableImage />
+                        <ConfigurableImage onImagePress={this.handleOpeningImagePicker} image={this.state.image} />
                     </View>
                     <View style={{ flex: 1 / 3, flexDirection: 'column' }}>
                         <RoundCounter round={this.state.roundNumber} />
