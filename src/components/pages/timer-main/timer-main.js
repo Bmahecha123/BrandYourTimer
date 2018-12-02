@@ -7,6 +7,17 @@ import RoundCounter from '../../round-counter/round-counter';
 import Timer from '../../timer/timer';
 import { Time, TimerType } from '../../../types';
 import ImagePicker from 'react-native-image-picker';
+import TrackPlayer from 'react-native-track-player';
+
+const playSound = {
+    id: 'Play',
+    url: require('../../../assets/timer.mp3')                
+};
+
+const warningSound = {
+    id: 'Warning',
+    url: require('../../../assets/warn.mp3')
+};
 
 export default class TimerMain extends React.Component {
     constructor(props) {
@@ -15,7 +26,7 @@ export default class TimerMain extends React.Component {
             ROUND: Time.MINUTES.ONE,
             WARN: Time.SECONDS.FIFTEEN,
             REST: Time.MINUTES.ONE,
-            timer: Time.MINUTES.SIX,
+            timer: Time.MINUTES.ONE,
             isPlaying: false,
             isResting: false,
             timerBackground: colors.timberWolf,
@@ -24,8 +35,11 @@ export default class TimerMain extends React.Component {
         }
     }
 
+    componentDidMount = async () => {
+        await TrackPlayer.setupPlayer();
+    }
+
     handleOpeningImagePicker = () => {
-        //alert('i got clicked!');
         const options = {
             title: 'Select Logo',
             cancelButtonTitle: 'Cancel',
@@ -102,11 +116,9 @@ export default class TimerMain extends React.Component {
         await this.setState({ isPlaying: !this.state.isPlaying });
 
         if (this.state.isPlaying) {
-            console.log('starting timer;');
-            this.timerStart();
-            this.setTimerBackgroundColor();
-        }
-        else {
+            await this.timerStart();
+            await this.setTimerBackgroundColor();
+        } else {
             clearInterval(this.timerInterval)
             await this.setState({
                 timerBackground: colors.timberWolf
@@ -129,25 +141,30 @@ export default class TimerMain extends React.Component {
         });
     }
 
-    setTimerBackgroundColor = () => {
+    setTimerBackgroundColor = async () => {
         if (!this.state.isResting) {
-            if (this.state.timer <= this.state.WARN)
+            if (this.state.timer <= this.state.WARN) {
+                await this.playTimerSound(false);
                 this.setState({
                     timerBackground: colors.yellow
                 });
-            else
+            }
+            else {
                 this.setState({
                     timerBackground: colors.green
                 });
+            }
         }
     }
 
-    timerStart = () => {
+    timerStart = async () => {
+        await this.playTimerSound(true);
+
         this.timerInterval = setInterval(() => {
             this.setState({
                 timer: this.state.timer - Time.SECONDS.ONE
             }, () => {
-                this.setTimerBackgroundColor();
+                await this.setTimerBackgroundColor();
                 if (this.state.timer === 0)
                     this.roundEnds();
             });
@@ -170,7 +187,7 @@ export default class TimerMain extends React.Component {
                 roundNumber: this.state.roundNumber + 1
             });
         }
-        this.timerStart();
+        await this.timerStart();
     }
 
     convertToMinutes = (ms) => {
@@ -181,6 +198,16 @@ export default class TimerMain extends React.Component {
             seconds == 60 ?
                 `${minutes + 1}:00` :
                 `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
+    }
+
+    playTimerSound = async (isPlaying) => {
+        await TrackPlayer.reset();
+    
+        isPlaying ? 
+        await TrackPlayer.add([playSound]) :
+        await TrackPlayer.add([warningSound]);
+
+        await TrackPlayer.play();
     }
 
     render() {
