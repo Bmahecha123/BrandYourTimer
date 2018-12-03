@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image } from 'react-native';
 import ButtonGrid from '../../button-grid/button-grid';
 import { colors, spacing, sizing } from '../../../theme';
 import ConfigurableImage from '../../configurable-image/configurable-image';
@@ -21,12 +21,12 @@ export default class TimerMain extends React.Component {
             isResting: false,
             timerBackground: colors.timberWolf,
             roundNumber: 1,
-            image: require('../../../assets/win.png')
+            image: require('../../../assets/win.png'),
+            isModalVisible: false
         }
     }
 
     handleOpeningImagePicker = () => {
-        //alert('i got clicked!');
         const options = {
             title: 'Select Logo',
             cancelButtonTitle: 'Cancel',
@@ -48,11 +48,10 @@ export default class TimerMain extends React.Component {
             } else {
                 const source = { uri: response.uri };
 
-                alert(response.uri);
-
                 this.setState({
                     image: source
                 });
+                this.toggleModal();
             }
         });
     }
@@ -190,9 +189,25 @@ export default class TimerMain extends React.Component {
                 `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
     }
 
+    toggleModal = () => {
+        this.setState({
+            isModalVisible: !this.state.isModalVisible
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
+                <Modal
+                    visible={this.state.isModalVisible}
+                    animationType='fade'
+                    supportedOrientations={['landscape']}
+                    onRequestClose={() => this.toggleModal()}>
+                    <View style={styles.modal} >
+                        <Image style={styles.image} resizeMode="contain" source={this.state.image} />
+                    </View>
+                </Modal>
+
                 <View style={styles.row}>
                     <View style={{ flex: 2 / 3, marginRight: sizing.xsmall }}>
                         <ConfigurableImage onImagePress={this.handleOpeningImagePicker} image={this.state.image} />
@@ -232,5 +247,13 @@ const styles = StyleSheet.create({
     buttonGrid: {
         flex: 1,
         alignSelf: 'flex-end'
+    },
+    image: {
+        flex: 1,
+        height: undefined,
+        width: undefined
+    },
+    modal: {
+        flex: 1
     }
 });
