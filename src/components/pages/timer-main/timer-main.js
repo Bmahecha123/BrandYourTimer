@@ -7,6 +7,7 @@ import RoundCounter from '../../round-counter/round-counter';
 import Timer from '../../timer/timer';
 import { Time, TimerType } from '../../../types';
 import ImagePicker from 'react-native-image-picker';
+import { Player } from 'react-native-audio-toolkit';
 
 export default class TimerMain extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ export default class TimerMain extends React.Component {
             isResting: false,
             timerBackground: colors.timberWolf,
             roundNumber: 1,
-            image: require('../../../assets/blog.jpg')
+            image: require('../../../assets/win.png')
         }
     }
 
@@ -131,18 +132,24 @@ export default class TimerMain extends React.Component {
 
     setTimerBackgroundColor = () => {
         if (!this.state.isResting) {
-            if (this.state.timer <= this.state.WARN)
+            if (this.state.timer <= this.state.WARN) {
+                if (this.state.timer === this.state.WARN) {
+                    new Player('warn.mp3').play();
+                }
                 this.setState({
                     timerBackground: colors.yellow
                 });
-            else
+            }
+            else {
                 this.setState({
                     timerBackground: colors.green
                 });
+            }
         }
     }
 
     timerStart = () => {
+        new Player('timer.mp3').play();
         this.timerInterval = setInterval(() => {
             this.setState({
                 timer: this.state.timer - Time.SECONDS.ONE
@@ -187,7 +194,7 @@ export default class TimerMain extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.row}>
-                    <View style={{ flex: 2 / 3 }}>
+                    <View style={{ flex: 2 / 3, marginRight: sizing.xsmall }}>
                         <ConfigurableImage onImagePress={this.handleOpeningImagePicker} image={this.state.image} />
                     </View>
                     <View style={{ flex: 1 / 3, flexDirection: 'column' }}>
@@ -215,7 +222,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: colors.mainBackgroundColor,
         margin: sizing.small
     },
     row: {

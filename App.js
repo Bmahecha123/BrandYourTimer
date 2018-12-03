@@ -1,6 +1,7 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import TimerMain from './src/components/pages/timer-main/timer-main';
+import { colors } from './src/theme';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -10,7 +11,25 @@ const instructions = Platform.select({
 });
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      backgroundColor: colors.mainBackgroundColor
+    };
+  }
+
+  handleUpdateBackground = (color) => {
+    this.setState({
+      backgroundColor: color
+    });
+  }
+
   render() {
-    return (<TimerMain />);
+    return (
+      <View style={{ backgroundColor: this.state.backgroundColor, flex: 1 }}>
+        <TimerMain onUpdateBackground={this.handleUpdateBackground} />
+      </View>
+    );
   }
 }
