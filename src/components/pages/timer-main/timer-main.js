@@ -1,13 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Image } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image, TouchableOpacity, Dimensions } from 'react-native';
 import ButtonGrid from '../../button-grid/button-grid';
-import { colors, spacing, sizing } from '../../../theme';
+import { colors, spacing, sizing, fontStyles } from '../../../theme';
 import ConfigurableImage from '../../configurable-image/configurable-image';
 import RoundCounter from '../../round-counter/round-counter';
 import Timer from '../../timer/timer';
 import { Time, TimerType } from '../../../types';
 import ImagePicker from 'react-native-image-picker';
 import { Player } from 'react-native-audio-toolkit';
+import RF from 'react-native-responsive-fontsize';
+import { ColorPicker } from 'react-native-color-picker'
 
 export default class TimerMain extends React.Component {
     constructor(props) {
@@ -195,6 +197,14 @@ export default class TimerMain extends React.Component {
         });
     }
 
+    handleColorChange = (color) => {
+        this.props.onUpdateBackground(color);
+    }
+
+    handleColorConfirm = () => {
+        this.toggleModal();
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -203,8 +213,23 @@ export default class TimerMain extends React.Component {
                     animationType='fade'
                     supportedOrientations={['landscape']}
                     onRequestClose={() => this.toggleModal()}>
-                    <View style={styles.modal} >
-                        <Image style={styles.image} resizeMode="contain" source={this.state.image} />
+                    <View style={{
+                        backgroundColor: this.props.backgroundColor,
+                        flex: 1,
+                        flexDirection: 'row'
+                    }} >
+                        <View style={{ flex: 2 / 3 }}>
+                            <Image style={{...styles.image, flex: 6, marginTop: sizing.xsmall}} resizeMode="contain" source={this.state.image} />
+                            <TouchableOpacity onPress={this.handleColorConfirm} style={styles.confirmBtn}>
+                                <Image style={styles.image} resizeMode="contain" source={require('../../../assets/checkmark.png')} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1 / 3, flexDirection: 'column', backgroundColor: colors.timberWolf }}>
+                            <ColorPicker
+                                onColorSelected={this.handleColorChange}
+                                style={{ flex: 1 }}
+                            />
+                        </View>
                     </View>
                 </Modal>
 
@@ -232,12 +257,23 @@ export default class TimerMain extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
+const commonStyles = {
+    button: {
+        flex: 1,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: colors.timberWolf
+    },
     container: {
         flex: 1,
         flexDirection: 'column',
         margin: sizing.small
+    },
+}
+
+const styles = StyleSheet.create({
+    container: {
+        ...commonStyles.container
     },
     row: {
         flex: 3,
@@ -253,7 +289,26 @@ const styles = StyleSheet.create({
         height: undefined,
         width: undefined
     },
-    modal: {
-        flex: 1
+    text: {
+        flex: 1,
+        alignSelf: 'center',
+        fontSize: RF(10),
+        fontWeight: fontStyles.bold
+    },
+    lightBtn: {
+        ...commonStyles.button,
+        backgroundColor: colors.mainBackgroundColor,
+    },
+    darkBtn: {
+        ...commonStyles.button,
+        backgroundColor: colors.primaryTextColor,
+    },
+    confirmBtn: {
+        ...commonStyles.button,
+        padding: sizing.xsmall,
+        backgroundColor: colors.green,
+        marginTop: sizing.xsmall,
+        marginLeft: sizing.small,
+        marginRight: sizing.small
     }
 });

@@ -10,6 +10,7 @@
     "react": "16.6.1",
     "react-native": "0.57.7",
     "react-native-audio-toolkit": "^1.0.6",
+    "react-native-color-picker": "^0.4.0",
     "react-native-image-picker": "^0.27.1"
   },
   "devDependencies": {

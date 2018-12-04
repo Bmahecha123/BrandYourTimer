@@ -28,7 +28,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={{ backgroundColor: this.state.backgroundColor, flex: 1 }}>
-        <TimerMain onUpdateBackground={this.handleUpdateBackground} />
+        <TimerMain backgroundColor={this.state.backgroundColor} onUpdateBackground={this.handleUpdateBackground} />
       </View>
     );
   }
