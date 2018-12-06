@@ -1,9 +1,12 @@
 {
   "name": "brand-your-timer",
-  "version": "0.0.1",
+  "description": "Customizeable timer for gyms to use in order to display their logo and color theme.",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "run-ios": "react-native run-ios",
+    "run-android": "react-native run-android",
     "test": "jest"
   },
   "dependencies": {
@@ -23,5 +26,11 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "author": { 
+    "name": "Brian Mahecha", 
+    "email": "admin@mahechabjj.com",
+    "url": "https://www.mahechabjj.com"
+  },
+  "license": "MIT"
 }
