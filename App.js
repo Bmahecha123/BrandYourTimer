@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import TimerMain from './src/components/pages/timer-main/timer-main';
+import TimerMain from './src/pages/timer-main/timer-main';
 import { colors } from './src/theme';
 
 const instructions = Platform.select({

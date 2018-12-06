@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { sizing, colors, fontStyles } from '../../theme';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import { TimerType, Time } from '../../types';
+import { TimerType } from '../../types';
 import RF from 'react-native-responsive-fontsize';
 
 export default class ButtonGrid extends React.Component {

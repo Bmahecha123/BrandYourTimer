@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, sizing, fontStyles } from '../../theme';
+import { colors, fontStyles } from '../../theme';
 import RF from 'react-native-responsive-fontsize';
 
 export default class RoundCounter extends React.Component {

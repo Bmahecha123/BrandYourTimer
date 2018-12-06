@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { sizing, colors } from '../../theme';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default class ConfigurableImage extends React.Component {
     constructor(props) {

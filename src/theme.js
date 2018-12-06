@@ -1,6 +1,6 @@
 const palette = {
     black: "#070d18",
-    white: "#FFFFFF",
+    white: "#FBF5F3",
     red: "#E5625E",
     green: "#BDD358",
     yellow: "#E5E059",
@@ -23,16 +23,6 @@ const colors = {
     timberWolf: palette.timberWolf
 };
 
-const spacing = {
-    xsmall: ".5rem", //8px
-    small: "1rem", //16px
-    medium: "2rem", //32px
-    large: "4rem", //64px
-    xlarge: "6rem", //94px
-    xxlarge: "8rem",
-    xxxlarge: "10rem"
-};
-
 const sizing = {
     xsmall: 12.5,
     small: 25,
@@ -41,4 +31,4 @@ const sizing = {
     xlarge: 100
 };
 
-export { colors, spacing, sizing, fontStyles };
+export { colors, sizing, fontStyles };

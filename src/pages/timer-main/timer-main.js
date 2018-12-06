@@ -1,31 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Image, TouchableOpacity, Dimensions } from 'react-native';
-import ButtonGrid from '../../button-grid/button-grid';
-import { colors, spacing, sizing, fontStyles } from '../../../theme';
-import ConfigurableImage from '../../configurable-image/configurable-image';
-import RoundCounter from '../../round-counter/round-counter';
-import Timer from '../../timer/timer';
-import { Time, TimerType } from '../../../types';
+import { StyleSheet, View } from 'react-native';
+import ButtonGrid from '../../components/button-grid/button-grid';
+import { colors, sizing, fontStyles } from '../../theme';
+import ConfigurableImage from '../../components/configurable-image/configurable-image';
+import RoundCounter from '../../components/round-counter/round-counter';
+import Timer from '../../components/timer/timer';
+import { Time } from '../../types';
 import ImagePicker from 'react-native-image-picker';
 import { Player } from 'react-native-audio-toolkit';
 import RF from 'react-native-responsive-fontsize';
-import { ColorPicker } from 'react-native-color-picker'
+import { fromHsv } from 'react-native-color-picker';
+import ThemeModal from '../theme-modal/theme-modal';
 
 export default class TimerMain extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ROUND: Time.MINUTES.ONE,
+            ROUND: Time.MINUTES.FIVE,
             WARN: Time.SECONDS.FIFTEEN,
             REST: Time.MINUTES.ONE,
-            timer: Time.MINUTES.SIX,
             isPlaying: false,
             isResting: false,
             timerBackground: colors.timberWolf,
             roundNumber: 1,
-            image: require('../../../assets/win.png'),
+            image: require('../../assets/image.png'),
             isModalVisible: false
         }
+    }
+
+    componentDidMount = async () => {
+        await this.handleRefresh();
     }
 
     handleOpeningImagePicker = () => {
@@ -198,40 +202,28 @@ export default class TimerMain extends React.Component {
     }
 
     handleColorChange = (color) => {
-        this.props.onUpdateBackground(color);
+        this.props.onUpdateBackground(fromHsv(color));
     }
 
     handleColorConfirm = () => {
         this.toggleModal();
     }
 
+    handleColorTextChange = (color) => {
+        this.props.onUpdateBackground(color);
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Modal
-                    visible={this.state.isModalVisible}
-                    animationType='fade'
-                    supportedOrientations={['landscape']}
-                    onRequestClose={() => this.toggleModal()}>
-                    <View style={{
-                        backgroundColor: this.props.backgroundColor,
-                        flex: 1,
-                        flexDirection: 'row'
-                    }} >
-                        <View style={{ flex: 2 / 3 }}>
-                            <Image style={{...styles.image, flex: 6, marginTop: sizing.xsmall}} resizeMode="contain" source={this.state.image} />
-                            <TouchableOpacity onPress={this.handleColorConfirm} style={styles.confirmBtn}>
-                                <Image style={styles.image} resizeMode="contain" source={require('../../../assets/checkmark.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flex: 1 / 3, flexDirection: 'column', backgroundColor: colors.timberWolf }}>
-                            <ColorPicker
-                                onColorSelected={this.handleColorChange}
-                                style={{ flex: 1 }}
-                            />
-                        </View>
-                    </View>
-                </Modal>
+                <ThemeModal
+                    isModalVisible={this.state.isModalVisible}
+                    toggleModal={this.toggleModal}
+                    backgroundColor={this.props.backgroundColor}
+                    image={this.state.image}
+                    onColorChange={this.handleColorChange}
+                    handleColorConfirm={this.handleColorConfirm}
+                    handleColorTextChange={this.handleColorTextChange} />
 
                 <View style={styles.row}>
                     <View style={{ flex: 2 / 3, marginRight: sizing.xsmall }}>
@@ -259,7 +251,6 @@ export default class TimerMain extends React.Component {
 }
 const commonStyles = {
     button: {
-        flex: 1,
         borderRadius: 100,
         borderWidth: 2,
         borderColor: colors.timberWolf
@@ -290,25 +281,20 @@ const styles = StyleSheet.create({
         width: undefined
     },
     text: {
-        flex: 1,
-        alignSelf: 'center',
-        fontSize: RF(10),
+        flex: 1 / 5,
+        alignSelf: 'stretch',
+        textAlign: 'center',
+
+        fontSize: RF(5),
         fontWeight: fontStyles.bold
     },
-    lightBtn: {
-        ...commonStyles.button,
-        backgroundColor: colors.mainBackgroundColor,
-    },
-    darkBtn: {
-        ...commonStyles.button,
-        backgroundColor: colors.primaryTextColor,
-    },
     confirmBtn: {
+        flex: 1 / 10,
         ...commonStyles.button,
         padding: sizing.xsmall,
         backgroundColor: colors.green,
         marginTop: sizing.xsmall,
-        marginLeft: sizing.small,
-        marginRight: sizing.small
+        marginLeft: sizing.xlarge,
+        marginRight: sizing.xlarge
     }
 });
