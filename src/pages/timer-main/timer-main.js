@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import ButtonGrid from '../../components/button-grid/button-grid';
-import { colors, sizing, fontStyles } from '../../theme';
+import { colors, sizing } from '../../theme';
 import ConfigurableImage from '../../components/configurable-image/configurable-image';
 import RoundCounter from '../../components/round-counter/round-counter';
 import Timer from '../../components/timer/timer';
 import { Time } from '../../types';
 import ImagePicker from 'react-native-image-picker';
 import { Player } from 'react-native-audio-toolkit';
-import RF from 'react-native-responsive-fontsize';
 import { fromHsv } from 'react-native-color-picker';
 import ThemeModal from '../theme-modal/theme-modal';
 
@@ -250,11 +249,6 @@ export default class TimerMain extends React.Component {
     }
 }
 const commonStyles = {
-    button: {
-        borderRadius: 100,
-        borderWidth: 2,
-        borderColor: colors.timberWolf
-    },
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -274,27 +268,5 @@ const styles = StyleSheet.create({
     buttonGrid: {
         flex: 1,
         alignSelf: 'flex-end'
-    },
-    image: {
-        flex: 1,
-        height: undefined,
-        width: undefined
-    },
-    text: {
-        flex: 1 / 5,
-        alignSelf: 'stretch',
-        textAlign: 'center',
-
-        fontSize: RF(5),
-        fontWeight: fontStyles.bold
-    },
-    confirmBtn: {
-        flex: 1 / 10,
-        ...commonStyles.button,
-        padding: sizing.xsmall,
-        backgroundColor: colors.green,
-        marginTop: sizing.xsmall,
-        marginLeft: sizing.xlarge,
-        marginRight: sizing.xlarge
     }
 });
