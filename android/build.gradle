@@ -13,7 +13,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.1.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,6 +21,19 @@ buildscript {
 }
 
 allprojects {
+    // force libs to use recent buildtools
+    // https://github.com/luggit/react-native-config/issues/299
+    subprojects {
+        afterEvaluate {
+            project ->
+                if (project.hasProperty("android")) {
+                    android {
+                        compileSdkVersion = 27
+                        buildToolsVersion = "27.0.3"
+                    }
+                }
+        }
+    }
     repositories {
         mavenLocal()
         google()

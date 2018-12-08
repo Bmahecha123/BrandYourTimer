@@ -95,7 +95,7 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion '28.0.3'
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.brandyourtimer"
@@ -105,6 +105,16 @@ android {
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
+        }
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('BYT_RELEASE_STORE_FILE')) {
+                storeFile file(BYT_RELEASE_STORE_FILE)
+                storePassword BYT_RELEASE_STORE_PASSWORD
+                keyAlias BYT_RELEASE_KEY_ALIAS
+                keyPassword BYT_RELEASE_KEY_PASSWORD
+            }
         }
     }
     splits {
@@ -119,6 +129,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
