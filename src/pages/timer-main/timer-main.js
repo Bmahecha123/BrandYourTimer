@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import ButtonGrid from '../../components/button-grid/button-grid';
 import { colors, sizing } from '../../theme';
 import ConfigurableImage from '../../components/configurable-image/configurable-image';
@@ -11,6 +11,8 @@ import { Player } from 'react-native-audio-toolkit';
 import { fromHsv } from 'react-native-color-picker';
 import ThemeModal from '../theme-modal/theme-modal';
 
+const DEFAULT_IMAGE = require('../../assets/image.png');
+const IMAGEKEY = 'BYT_LOGO';
 export default class TimerMain extends React.Component {
     constructor(props) {
         super(props);
@@ -22,16 +24,44 @@ export default class TimerMain extends React.Component {
             isResting: false,
             timerBackground: colors.timberWolf,
             roundNumber: 1,
-            image: require('../../assets/image.png'),
+            image: DEFAULT_IMAGE,
             isModalVisible: false
         }
     }
 
     componentDidMount = async () => {
+        await this.setDefaultImage();
         await this.handleRefresh();
     }
 
-    handleOpeningImagePicker = () => {
+    setDefaultImage = async () => {
+        try {
+            const value = await AsyncStorage.getItem(IMAGEKEY);
+            if (value !== null) {
+                await this.setState({
+                    image: {
+                        uri: value
+                    }
+                });
+            }
+        } catch (error) {
+            console.log('Error setting previous image, setting back to default.');
+            await this.setState({
+                image: DEFAULT_IMAGE
+            });
+        }
+    }
+
+    saveImageToStorage = async (image) => {
+        try {
+            await AsyncStorage.setItem(IMAGEKEY, image);
+        } catch (error) {
+            console.log('Error saving image to storage.');
+            console.log(error);
+        }
+    }
+
+    handleOpeningImagePicker = async () => {
         const options = {
             title: 'Select Logo',
             cancelButtonTitle: 'Cancel',
@@ -51,10 +81,11 @@ export default class TimerMain extends React.Component {
             } else if (response.error) {
                 console.log(`ImagePicker Error: ${response.error}`);
             } else {
-                const source = { uri: response.uri };
-
+                this.saveImageToStorage(response.uri);
                 this.setState({
-                    image: source
+                    image: {
+                        uri: response.uri
+                    }
                 });
                 this.toggleModal();
             }
