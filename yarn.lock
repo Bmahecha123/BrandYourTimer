@@ -3936,9 +3936,9 @@ minipass@^2.2.1, minipass@^2.3.4:
     yallist "^3.0.0"
 
 minizlib@^1.1.1:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-1.2.0.tgz#59517387478fd98d8017ed0299c6cb16cbd12da3"
-  integrity sha512-vQhkoouK/oKRVuFJynustmW3wrqZEXOrfbVVirvOVeglH4TNvIkcqiyojlIbbZYYDJZSbEKEXmDudg+tyRkm6g==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-1.2.1.tgz#dd27ea6136243c7c880684e8672bb3a45fd9b614"
+  integrity sha512-7+4oTUOWKg7AuL3vloEWekXY2/D20cevzsrNT2kGWm+39J9hGTCBv8VI5Pm5lXZ/o3/mdR4f8rflAPhnQb8mPA==
   dependencies:
     minipass "^2.2.1"
 
@@ -4662,9 +4662,9 @@ react-native-iphone-x-helper@^1.0.2:
   integrity sha512-xIeTo4s77wwKgBZLVRIZC9tM9/PkXS46Ul76NXmvmixEb3ZwqGdQesR3zRiLMOoIdfOURB6N9bba9po7+x9Bag==
 
 react-native-responsive-fontsize@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/react-native-responsive-fontsize/-/react-native-responsive-fontsize-0.1.5.tgz#f54be78a823e6ec38628b09a69dc7c436bcf7114"
-  integrity sha512-SUQjl705PlRev5LKNmI2eEfGotL/+vF7isxIYNMHYqjNlnlif91r8axjCcYvY1i/koPUK34PU6ECl+4SUmdETQ==
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-fontsize/-/react-native-responsive-fontsize-0.1.6.tgz#42992bceee49def2ca3c6d2a2d53cd61302b3c07"
+  integrity sha512-Nhtqn3CwsXEl5cs3+6wO+drmxuE+HugdGTGZKEAmwk41bEiivKywwx575N6zq8gPc9C+ZJV3kgKJjbDCNILmfw==
   dependencies:
     react-native-iphone-x-helper "^1.0.2"
 
