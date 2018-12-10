@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Platform } from 'react-native';
 import ButtonGrid from '../../components/button-grid/button-grid';
 import { colors, sizing } from '../../theme';
 import ConfigurableImage from '../../components/configurable-image/configurable-image';
@@ -13,6 +13,8 @@ import ThemeModal from '../theme-modal/theme-modal';
 
 const DEFAULT_IMAGE = require('../../assets/image.png');
 const IMAGEKEY = 'BYT_LOGO';
+const BGCOLORKEY = 'BYT_BACKGROUND_COLOR';
+
 export default class TimerMain extends React.Component {
     constructor(props) {
         super(props);
@@ -31,6 +33,7 @@ export default class TimerMain extends React.Component {
 
     componentDidMount = async () => {
         await this.setDefaultImage();
+        await this.setDefaultBackgroundColor();
         await this.handleRefresh();
     }
 
@@ -52,9 +55,20 @@ export default class TimerMain extends React.Component {
         }
     }
 
-    saveImageToStorage = async (image) => {
+    setDefaultBackgroundColor = async () => {
         try {
-            await AsyncStorage.setItem(IMAGEKEY, image);
+            const value = await AsyncStorage.getItem(BGCOLORKEY);
+            if (value !== null) {
+                this.props.onUpdateBackground(value);
+            }
+        } catch (error) {
+            console.log('Error setting previous background color, setting back to default.');
+        }
+    }
+
+    saveToStorage = async (key, value) => {
+        try {
+            await AsyncStorage.setItem(key, value);
         } catch (error) {
             console.log('Error saving image to storage.');
             console.log(error);
@@ -66,11 +80,7 @@ export default class TimerMain extends React.Component {
             title: 'Select Logo',
             cancelButtonTitle: 'Cancel',
             cameraType: 'front',
-            mediaType: 'photo',
-            storageOptions: {
-                cameraRoll: true,
-                waitUntilSaved: true
-            }
+            mediaType: 'photo'
         };
 
         ImagePicker.showImagePicker(options, (response) => {
@@ -81,10 +91,10 @@ export default class TimerMain extends React.Component {
             } else if (response.error) {
                 console.log(`ImagePicker Error: ${response.error}`);
             } else {
-                this.saveImageToStorage(response.uri);
+                this.saveToStorage(IMAGEKEY, 'data:image/jpeg;base64,' + response.data);
                 this.setState({
                     image: {
-                        uri: response.uri
+                        uri: 'data:image/jpeg;base64,' + response.data
                     }
                 });
                 this.toggleModal();
@@ -231,7 +241,8 @@ export default class TimerMain extends React.Component {
         });
     }
 
-    handleColorChange = (color) => {
+    handleColorChange = async (color) => {
+        await this.saveToStorage(BGCOLORKEY, fromHsv(color));
         this.props.onUpdateBackground(fromHsv(color));
     }
 
