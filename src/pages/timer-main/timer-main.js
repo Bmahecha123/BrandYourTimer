@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Platform } from 'react-native';
 import ButtonGrid from '../../components/button-grid/button-grid';
 import { colors, sizing } from '../../theme';
 import ConfigurableImage from '../../components/configurable-image/configurable-image';
@@ -80,11 +80,7 @@ export default class TimerMain extends React.Component {
             title: 'Select Logo',
             cancelButtonTitle: 'Cancel',
             cameraType: 'front',
-            mediaType: 'photo',
-            storageOptions: {
-                cameraRoll: true,
-                waitUntilSaved: true
-            }
+            mediaType: 'photo'
         };
 
         ImagePicker.showImagePicker(options, (response) => {
@@ -95,10 +91,10 @@ export default class TimerMain extends React.Component {
             } else if (response.error) {
                 console.log(`ImagePicker Error: ${response.error}`);
             } else {
-                this.saveToStorage(IMAGEKEY, response.uri);
+                this.saveToStorage(IMAGEKEY, 'data:image/jpeg;base64,' + response.data);
                 this.setState({
                     image: {
-                        uri: response.uri
+                        uri: 'data:image/jpeg;base64,' + response.data
                     }
                 });
                 this.toggleModal();
@@ -246,7 +242,7 @@ export default class TimerMain extends React.Component {
     }
 
     handleColorChange = async (color) => {
-        await this.saveToStorage(BGCOLORKEY, color);
+        await this.saveToStorage(BGCOLORKEY, fromHsv(color));
         this.props.onUpdateBackground(fromHsv(color));
     }
 
