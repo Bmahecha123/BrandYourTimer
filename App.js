@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, StatusBar } from 'react-native';
 import TimerMain from './src/pages/timer-main/timer-main';
 import { colors } from './src/theme';
 
@@ -28,6 +28,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={{ backgroundColor: this.state.backgroundColor, flex: 1 }}>
+        <StatusBar hidden={true} />
         <TimerMain backgroundColor={this.state.backgroundColor} onUpdateBackground={this.handleUpdateBackground} />
       </View>
     );
